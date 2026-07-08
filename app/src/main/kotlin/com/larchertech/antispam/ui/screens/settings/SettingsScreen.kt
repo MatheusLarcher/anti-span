@@ -1,11 +1,16 @@
 package com.larchertech.antispam.ui.screens.settings
 
-import androidx.compose.foundation.layout.Column
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
@@ -17,6 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,8 +33,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.larchertech.antispam.AntiSpamApp
 import com.larchertech.antispam.R
+import com.larchertech.antispam.blocking.PermissionStatus
+import com.larchertech.antispam.blocking.SimInfo
+import com.larchertech.antispam.blocking.SimSubscriptions
 import com.larchertech.antispam.data.db.AllowedNumberEntity
 import com.larchertech.antispam.ui.common.formatTimestamp
+import com.larchertech.antispam.ui.common.rememberRefreshOnResume
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +52,15 @@ fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) 
     val callBlockingEnabled by viewModel.callBlockingEnabled.collectAsStateWithLifecycle()
     val smsBlockingEnabled by viewModel.smsBlockingEnabled.collectAsStateWithLifecycle()
     val allowedNumbers by viewModel.allowedNumbers.collectAsStateWithLifecycle()
+    val callBlockingSubscriptionId by viewModel.callBlockingSubscriptionId.collectAsStateWithLifecycle()
+    val smsBlockingSubscriptionId by viewModel.smsBlockingSubscriptionId.collectAsStateWithLifecycle()
+
+    val resumeCounter by rememberRefreshOnResume()
+    val hasMultipleSims = remember(resumeCounter) { PermissionStatus.hasMultipleSims(context) }
+    val hasPhoneStatePermission = remember(resumeCounter) { PermissionStatus.hasReadPhoneStatePermission(context) }
+    val activeSims = remember(resumeCounter, hasPhoneStatePermission) { SimSubscriptions.listActive(context) }
+
+    val phoneStateLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -73,6 +94,46 @@ fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) 
                     },
                 )
             }
+            if (hasMultipleSims) {
+                item { HorizontalDivider() }
+                item {
+                    Text(
+                        text = stringResource(R.string.settings_sim_section_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(16.dp),
+                    )
+                }
+                if (!hasPhoneStatePermission) {
+                    item {
+                        ListItem(
+                            headlineContent = { Text(stringResource(R.string.settings_sim_permission_title)) },
+                            supportingContent = { Text(stringResource(R.string.settings_sim_permission_subtitle)) },
+                            trailingContent = {
+                                Button(onClick = { phoneStateLauncher.launch(Manifest.permission.READ_PHONE_STATE) }) {
+                                    Text(stringResource(R.string.action_activate))
+                                }
+                            },
+                        )
+                    }
+                } else {
+                    item {
+                        SimChoiceRow(
+                            title = stringResource(R.string.settings_sim_call_label),
+                            sims = activeSims,
+                            selectedSubscriptionId = callBlockingSubscriptionId,
+                            onSelect = viewModel::setCallBlockingSubscriptionId,
+                        )
+                    }
+                    item {
+                        SimChoiceRow(
+                            title = stringResource(R.string.settings_sim_sms_label),
+                            sims = activeSims,
+                            selectedSubscriptionId = smsBlockingSubscriptionId,
+                            onSelect = viewModel::setSmsBlockingSubscriptionId,
+                        )
+                    }
+                }
+            }
             item { HorizontalDivider() }
             item {
                 Text(
@@ -96,6 +157,39 @@ fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) 
             }
         }
     }
+}
+
+@Composable
+private fun SimChoiceRow(
+    title: String,
+    sims: List<SimInfo>,
+    selectedSubscriptionId: Int?,
+    onSelect: (Int?) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val allChipsLabel = stringResource(R.string.settings_sim_choice_all)
+    val selectedLabel = sims.find { it.subscriptionId == selectedSubscriptionId }?.displayName ?: allChipsLabel
+
+    ListItem(
+        headlineContent = { Text(title) },
+        trailingContent = {
+            Box {
+                OutlinedButton(onClick = { expanded = true }) { Text(selectedLabel) }
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    DropdownMenuItem(
+                        text = { Text(allChipsLabel) },
+                        onClick = { onSelect(null); expanded = false },
+                    )
+                    sims.forEach { sim ->
+                        DropdownMenuItem(
+                            text = { Text(sim.displayName) },
+                            onClick = { onSelect(sim.subscriptionId); expanded = false },
+                        )
+                    }
+                }
+            }
+        },
+    )
 }
 
 @Composable

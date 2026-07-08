@@ -24,12 +24,26 @@ class SettingsViewModel(
     val allowedNumbers: StateFlow<List<AllowedNumberEntity>> = allowedNumberDao.observeAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val callBlockingSubscriptionId: StateFlow<Int?> = settingsRepository.callBlockingSubscriptionId
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val smsBlockingSubscriptionId: StateFlow<Int?> = settingsRepository.smsBlockingSubscriptionId
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
     fun setCallBlockingEnabled(enabled: Boolean) {
         viewModelScope.launch { settingsRepository.setCallBlockingEnabled(enabled) }
     }
 
     fun setSmsBlockingEnabled(enabled: Boolean) {
         viewModelScope.launch { settingsRepository.setSmsBlockingEnabled(enabled) }
+    }
+
+    fun setCallBlockingSubscriptionId(subscriptionId: Int?) {
+        viewModelScope.launch { settingsRepository.setCallBlockingSubscriptionId(subscriptionId) }
+    }
+
+    fun setSmsBlockingSubscriptionId(subscriptionId: Int?) {
+        viewModelScope.launch { settingsRepository.setSmsBlockingSubscriptionId(subscriptionId) }
     }
 
     fun removeAllowedNumber(phoneNumberNormalized: String) {
