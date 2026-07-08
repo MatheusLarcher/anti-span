@@ -20,12 +20,24 @@
     <string name="sms_empty">Nenhum SMS bloqueado ainda</string>
     <string name="action_activate">Ativar</string>
 
-    <string name="settings_request_call_role_title">Ativar bloqueio de ligações (temporário)</string>
-    <string name="settings_request_call_role_subtitle">Concede o papel de screening de chamada — isso vira um checklist de onboarding na Tarefa 6</string>
-    <string name="settings_request_contacts_title">Permitir acesso aos contatos (temporário)</string>
-    <string name="settings_request_contacts_subtitle">Necessário pra saber quem é ou não é contato — isso vira um checklist de onboarding na Tarefa 6</string>
-    <string name="settings_request_sms_title">Permitir receber SMS (temporário)</string>
-    <string name="settings_request_sms_subtitle">Necessário pra capturar o remetente/corpo da mensagem — isso vira um checklist de onboarding na Tarefa 6</string>
-    <string name="settings_request_notification_access_title">Acesso a notificações (temporário)</string>
-    <string name="settings_request_notification_access_subtitle">Necessário pra suprimir notificação de SMS desconhecido — abre a tela do sistema, procure "Anti-Spam" na lista</string>
+    <string name="protection_incomplete_banner">Proteção incompleta — toque para configurar</string>
+
+    <string name="onboarding_title">Configurar proteção</string>
+    <string name="onboarding_intro">Esses acessos são necessários pro Anti-Spam funcionar de verdade.</string>
+    <string name="onboarding_contacts_title">Contatos</string>
+    <string name="onboarding_contacts_subtitle">Pra saber quem é ou não é contato</string>
+    <string name="onboarding_call_role_title">Bloqueio de ligação</string>
+    <string name="onboarding_call_role_subtitle">Papel de screening de chamada</string>
+    <string name="onboarding_sms_title">Recebimento de SMS</string>
+    <string name="onboarding_sms_subtitle">Pra capturar remetente e mensagem</string>
+    <string name="onboarding_notification_access_title">Acesso a notificações</string>
+    <string name="onboarding_notification_access_subtitle">Pra suprimir notificação de SMS desconhecido</string>
+    <string name="onboarding_battery_title">Ignorar otimização de bateria (recomendado)</string>
+    <string name="onboarding_battery_subtitle">Evita que o sistema derrube a proteção em segundo plano</string>
+    <string name="onboarding_status_granted">Concedido</string>
+    <string name="onboarding_continue">Continuar</string>
+
+    <string name="settings_open_onboarding_title">Configurar proteção</string>
+    <string name="settings_open_onboarding_subtitle">Ver checklist de permissões necessárias</string>
+    <string name="action_open">Abrir</string>
 </resources>

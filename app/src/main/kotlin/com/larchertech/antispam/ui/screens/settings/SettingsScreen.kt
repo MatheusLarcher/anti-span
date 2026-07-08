@@ -1,11 +1,5 @@
 package com.larchertech.antispam.ui.screens.settings
 
-import android.Manifest
-import android.app.role.RoleManager
-import android.content.Intent
-import android.provider.Settings
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.getSystemService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.larchertech.antispam.AntiSpamApp
@@ -29,7 +22,7 @@ import com.larchertech.antispam.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
+fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val container = (context.applicationContext as AntiSpamApp).container
     val viewModel: SettingsViewModel = viewModel(
@@ -38,18 +31,6 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
 
     val callBlockingEnabled by viewModel.callBlockingEnabled.collectAsStateWithLifecycle()
     val smsBlockingEnabled by viewModel.smsBlockingEnabled.collectAsStateWithLifecycle()
-
-    val roleRequestLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-    ) { /* status real vira um checklist visível na Tarefa 6 */ }
-
-    val contactsPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { /* status real vira um checklist visível na Tarefa 6 */ }
-
-    val smsPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { /* status real vira um checklist visível na Tarefa 6 */ }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -71,41 +52,10 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 },
             )
             ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_request_call_role_title)) },
-                supportingContent = { Text(stringResource(R.string.settings_request_call_role_subtitle)) },
+                headlineContent = { Text(stringResource(R.string.settings_open_onboarding_title)) },
+                supportingContent = { Text(stringResource(R.string.settings_open_onboarding_subtitle)) },
                 trailingContent = {
-                    Button(onClick = {
-                        val roleManager = context.getSystemService<RoleManager>()
-                        val intent = roleManager?.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
-                        if (intent != null) roleRequestLauncher.launch(intent)
-                    }) { Text(stringResource(R.string.action_activate)) }
-                },
-            )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_request_contacts_title)) },
-                supportingContent = { Text(stringResource(R.string.settings_request_contacts_subtitle)) },
-                trailingContent = {
-                    Button(onClick = {
-                        contactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
-                    }) { Text(stringResource(R.string.action_activate)) }
-                },
-            )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_request_sms_title)) },
-                supportingContent = { Text(stringResource(R.string.settings_request_sms_subtitle)) },
-                trailingContent = {
-                    Button(onClick = {
-                        smsPermissionLauncher.launch(Manifest.permission.RECEIVE_SMS)
-                    }) { Text(stringResource(R.string.action_activate)) }
-                },
-            )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_request_notification_access_title)) },
-                supportingContent = { Text(stringResource(R.string.settings_request_notification_access_subtitle)) },
-                trailingContent = {
-                    Button(onClick = {
-                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                    }) { Text(stringResource(R.string.action_activate)) }
+                    Button(onClick = onOpenOnboarding) { Text(stringResource(R.string.action_open)) }
                 },
             )
         }

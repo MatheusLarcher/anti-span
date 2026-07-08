@@ -37,10 +37,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.larchertech.antispam.AntiSpamApp
 import com.larchertech.antispam.R
+import com.larchertech.antispam.blocking.PermissionStatus
+import com.larchertech.antispam.ui.common.ProtectionBanner
 import com.larchertech.antispam.ui.common.formatTimestamp
+import com.larchertech.antispam.ui.common.rememberRefreshOnResume
 
 @Composable
-fun SmsScreen(modifier: Modifier = Modifier) {
+fun SmsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val container = (context.applicationContext as AntiSpamApp).container
     val viewModel: SmsViewModel = viewModel(
@@ -53,12 +56,16 @@ fun SmsScreen(modifier: Modifier = Modifier) {
     val conversations by viewModel.conversations.collectAsStateWithLifecycle()
     var openedNumber by rememberSaveable { mutableStateOf<String?>(null) }
     val openedConversation = conversations.find { it.phoneNumberNormalized == openedNumber }
+    val resumeCounter by rememberRefreshOnResume()
+    val protectionComplete = remember(resumeCounter) { PermissionStatus.isSmsProtectionComplete(context) }
 
     if (openedConversation == null) {
         SmsConversationListScreen(
             modifier = modifier,
             conversations = conversations,
             onOpenConversation = { openedNumber = it },
+            showProtectionBanner = !protectionComplete,
+            onOpenOnboarding = onOpenOnboarding,
         )
     } else {
         SmsConversationDetailScreen(
@@ -78,37 +85,44 @@ fun SmsScreen(modifier: Modifier = Modifier) {
 private fun SmsConversationListScreen(
     conversations: List<SmsConversation>,
     onOpenConversation: (String) -> Unit,
+    showProtectionBanner: Boolean,
+    onOpenOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.sms_title)) }) },
     ) { innerPadding ->
-        if (conversations.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(stringResource(R.string.sms_empty))
+        Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            if (showProtectionBanner) {
+                ProtectionBanner(onClick = onOpenOnboarding)
             }
-        } else {
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                items(conversations, key = { it.phoneNumberNormalized }) { conversation ->
-                    ListItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpenConversation(conversation.phoneNumberNormalized) },
-                        headlineContent = { Text(conversation.phoneNumberNormalized) },
-                        supportingContent = {
-                            Text(
-                                "${conversation.lastMessage.body} · ${formatTimestamp(conversation.lastMessage.timestamp)}",
-                                maxLines = 1,
-                            )
-                        },
-                    )
+            if (conversations.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(stringResource(R.string.sms_empty))
+                }
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize().weight(1f)) {
+                    items(conversations, key = { it.phoneNumberNormalized }) { conversation ->
+                        ListItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenConversation(conversation.phoneNumberNormalized) },
+                            headlineContent = { Text(conversation.phoneNumberNormalized) },
+                            supportingContent = {
+                                Text(
+                                    "${conversation.lastMessage.body} · ${formatTimestamp(conversation.lastMessage.timestamp)}",
+                                    maxLines = 1,
+                                )
+                            },
+                        )
+                    }
                 }
             }
         }
