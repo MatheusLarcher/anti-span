@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.Telephony
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.larchertech.antispam.AntiSpamApp
 import com.larchertech.antispam.data.db.BlockedSmsEntity
@@ -51,9 +52,15 @@ class SmsReceivedReceiver : BroadcastReceiver() {
                         ),
                     )
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "Falha ao processar SMS recebido", e)
             } finally {
                 pendingResult.finish()
             }
         }
+    }
+
+    private companion object {
+        const val TAG = "SmsReceivedReceiver"
     }
 }

@@ -3,7 +3,6 @@ package com.larchertech.antispam.ui.screens.calls
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.larchertech.antispam.blocking.PhoneNumbers
 import com.larchertech.antispam.data.db.AllowedNumberDao
 import com.larchertech.antispam.data.db.AllowedNumberEntity
 import com.larchertech.antispam.data.db.BlockedCallDao
@@ -25,7 +24,7 @@ class CallsViewModel(
         viewModelScope.launch {
             allowedNumberDao.insert(
                 AllowedNumberEntity(
-                    phoneNumberNormalized = PhoneNumbers.normalize(call.phoneNumberRaw),
+                    phoneNumberNormalized = call.phoneNumberNormalized,
                     addedAt = System.currentTimeMillis(),
                 ),
             )

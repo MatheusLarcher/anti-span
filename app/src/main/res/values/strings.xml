@@ -40,4 +40,8 @@
     <string name="settings_open_onboarding_title">Configurar proteção</string>
     <string name="settings_open_onboarding_subtitle">Ver checklist de permissões necessárias</string>
     <string name="action_open">Abrir</string>
+
+    <string name="settings_allowed_numbers_title">Números permitidos</string>
+    <string name="settings_allowed_numbers_empty">Nenhum número permitido manualmente</string>
+    <string name="action_remove">Remover</string>
 </resources>
