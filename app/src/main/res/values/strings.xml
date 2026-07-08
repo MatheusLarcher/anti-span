@@ -21,4 +21,8 @@
     <string name="settings_request_call_role_subtitle">Concede o papel de screening de chamada — isso vira um checklist de onboarding na Tarefa 6</string>
     <string name="settings_request_contacts_title">Permitir acesso aos contatos (temporário)</string>
     <string name="settings_request_contacts_subtitle">Necessário pra saber quem é ou não é contato — isso vira um checklist de onboarding na Tarefa 6</string>
+    <string name="settings_request_sms_title">Permitir receber SMS (temporário)</string>
+    <string name="settings_request_sms_subtitle">Necessário pra capturar o remetente/corpo da mensagem — isso vira um checklist de onboarding na Tarefa 6</string>
+    <string name="settings_request_notification_access_title">Acesso a notificações (temporário)</string>
+    <string name="settings_request_notification_access_subtitle">Necessário pra suprimir notificação de SMS desconhecido — abre a tela do sistema, procure "Anti-Spam" na lista</string>
 </resources>

@@ -2,6 +2,8 @@ package com.larchertech.antispam.ui.screens.settings
 
 import android.Manifest
 import android.app.role.RoleManager
+import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -45,6 +47,10 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         ActivityResultContracts.RequestPermission(),
     ) { /* status real vira um checklist visível na Tarefa 6 */ }
 
+    val smsPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { /* status real vira um checklist visível na Tarefa 6 */ }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.settings_title)) }) },
@@ -81,6 +87,24 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 trailingContent = {
                     Button(onClick = {
                         contactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                    }) { Text(stringResource(R.string.action_activate)) }
+                },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_request_sms_title)) },
+                supportingContent = { Text(stringResource(R.string.settings_request_sms_subtitle)) },
+                trailingContent = {
+                    Button(onClick = {
+                        smsPermissionLauncher.launch(Manifest.permission.RECEIVE_SMS)
+                    }) { Text(stringResource(R.string.action_activate)) }
+                },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_request_notification_access_title)) },
+                supportingContent = { Text(stringResource(R.string.settings_request_notification_access_subtitle)) },
+                trailingContent = {
+                    Button(onClick = {
+                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                     }) { Text(stringResource(R.string.action_activate)) }
                 },
             )
