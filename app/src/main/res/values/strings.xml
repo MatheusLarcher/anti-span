@@ -5,4 +5,10 @@
     <string name="nav_calls">Ligações</string>
     <string name="nav_sms">SMS</string>
     <string name="nav_settings">Ajustes</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_call_blocking_title">Bloquear ligações desconhecidas</string>
+    <string name="settings_call_blocking_subtitle">Rejeita automaticamente quem não está nos seus contatos</string>
+    <string name="settings_sms_blocking_title">Bloquear SMS desconhecidos</string>
+    <string name="settings_sms_blocking_subtitle">Suprime a notificação de SMS de quem não está nos seus contatos</string>
 </resources>
