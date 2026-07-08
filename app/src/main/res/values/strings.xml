@@ -11,4 +11,14 @@
     <string name="settings_call_blocking_subtitle">Rejeita automaticamente quem não está nos seus contatos</string>
     <string name="settings_sms_blocking_title">Bloquear SMS desconhecidos</string>
     <string name="settings_sms_blocking_subtitle">Suprime a notificação de SMS de quem não está nos seus contatos</string>
+
+    <string name="calls_title">Ligações bloqueadas</string>
+    <string name="calls_empty">Nenhuma ligação bloqueada ainda</string>
+    <string name="action_allow_number">Permitir este número</string>
+    <string name="action_activate">Ativar</string>
+
+    <string name="settings_request_call_role_title">Ativar bloqueio de ligações (temporário)</string>
+    <string name="settings_request_call_role_subtitle">Concede o papel de screening de chamada — isso vira um checklist de onboarding na Tarefa 6</string>
+    <string name="settings_request_contacts_title">Permitir acesso aos contatos (temporário)</string>
+    <string name="settings_request_contacts_subtitle">Necessário pra saber quem é ou não é contato — isso vira um checklist de onboarding na Tarefa 6</string>
 </resources>
