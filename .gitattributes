@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Shell scripts must stay LF - CRLF breaks POSIX execution
+gradlew text eol=lf
+*.sh text eol=lf
