@@ -15,6 +15,9 @@
     <string name="calls_title">Ligações bloqueadas</string>
     <string name="calls_empty">Nenhuma ligação bloqueada ainda</string>
     <string name="action_allow_number">Permitir este número</string>
+
+    <string name="sms_title">SMS bloqueados</string>
+    <string name="sms_empty">Nenhum SMS bloqueado ainda</string>
     <string name="action_activate">Ativar</string>
 
     <string name="settings_request_call_role_title">Ativar bloqueio de ligações (temporário)</string>
