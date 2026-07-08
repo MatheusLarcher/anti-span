@@ -59,4 +59,13 @@ object SimSubscriptions {
         if (selectedSubscriptionId == null) return true
         return eventSubscriptionId == selectedSubscriptionId
     }
+
+    /**
+     * O chip salvo em Ajustes ainda está entre os chips ativos do aparelho? Usar antes de aplicar
+     * o filtro: um subId que sumiu (chip removido/trocado) ou ficou inacessível (permissão
+     * revogada) não deve continuar restringindo o bloqueio — cai em "Todos os chips" de novo.
+     */
+    fun isStillActive(context: Context, subscriptionId: Int): Boolean {
+        return listActive(context).any { it.subscriptionId == subscriptionId }
+    }
 }
