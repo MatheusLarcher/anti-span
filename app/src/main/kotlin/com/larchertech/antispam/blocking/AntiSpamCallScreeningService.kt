@@ -39,7 +39,13 @@ class AntiSpamCallScreeningService : CallScreeningService() {
                     Manifest.permission.READ_CONTACTS,
                 ) == PackageManager.PERMISSION_GRANTED
                 val normalized = PhoneNumbers.normalize(rawNumber)
-                val known = !blockingEnabled || !hasContactsPermission ||
+                val selectedSubscriptionId = container.settingsRepository.callBlockingSubscriptionId.first()
+                val eventSubscriptionId = SimSubscriptions.resolveCallSubscriptionId(
+                    this@AntiSpamCallScreeningService,
+                    callDetails,
+                )
+                val chipMatches = SimSubscriptions.matchesFilter(selectedSubscriptionId, eventSubscriptionId)
+                val known = !blockingEnabled || !hasContactsPermission || !chipMatches ||
                     PhoneNumbers.isSavedContact(this@AntiSpamCallScreeningService, rawNumber) ||
                     container.database.allowedNumberDao().isAllowed(normalized)
 
