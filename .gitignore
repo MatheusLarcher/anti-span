@@ -16,3 +16,8 @@
 app/build/
 app/release/
 app/debug/
+
+# Assinatura de release (chave e senha ficam só na máquina local)
+/keystore.properties
+*.keystore
+*.jks
