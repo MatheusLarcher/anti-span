@@ -2,6 +2,11 @@
 
 - **Status:** aprovado pelo usuário em 2026-07-08 — SMS via Opção B (Notification Listener), ligação via `CallScreeningService`
 - **Data:** 2026-07-08
+- **Atualização (2026-07-15):** o bloqueio de SMS (seções 3.3, 4.2-4.4 na parte de SMS, item 2 da
+  seção 5, itens de SMS/notificação da seção 6) foi **removido do app** — testado em aparelho
+  real, não bloqueava de forma confiável. O app hoje só bloqueia ligação; este documento fica
+  como registro histórico de por que a Opção B foi escolhida na época, não como descrição do
+  app atual. Ver `git log` para o commit da remoção.
 
 ## 1. Contexto e objetivo
 

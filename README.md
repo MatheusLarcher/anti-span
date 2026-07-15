@@ -1,20 +1,15 @@
 # Anti-Spam
 
-App Android que bloqueia automaticamente ligações e SMS de números que não estão nos seus
-contatos — sem tocar, sem notificação nenhuma aparecendo.
+App Android que bloqueia automaticamente ligações de números que não estão nos seus contatos —
+sem tocar, sem notificação nenhuma aparecendo.
 
 ## O que faz
 
 - **Ligações de desconhecidos** são rejeitadas na hora (via `CallScreeningService`, sem precisar
   virar o discador padrão do aparelho).
-- **SMS de desconhecidos** têm a notificação suprimida — a mensagem continua chegando normal no
-  seu app de mensagens de sempre, só a notificação que não aparece.
-- Lista de **ligações bloqueadas** e de **SMS bloqueados** (esse último em formato de chat, por
-  número).
-- Toggle independente pra ligar/desligar o bloqueio de ligação e o de SMS.
+- Lista de **ligações bloqueadas**, com horário e número.
+- Toggle pra ligar/desligar o bloqueio.
 - Ação "permitir este número" pra liberar um número específico direto da lista.
-- Em aparelhos com **2 ou mais chips**, dá pra escolher em qual chip cada bloqueio (ligação e
-  SMS, separadamente) deve atuar.
 - Onboarding guiado com checklist das permissões necessárias.
 
 ## Stack
@@ -32,6 +27,7 @@ não está na Play Store.
 
 ## Design
 
-O desenho da arquitetura (por que `CallScreeningService`, por que notification-listener em vez
-de virar app de SMS padrão, modelo de dados, etc.) está documentado em
-[`docs/superpowers/specs/`](docs/superpowers/specs/).
+O desenho da arquitetura (por que `CallScreeningService`, modelo de dados, etc.) está
+documentado em [`docs/superpowers/specs/`](docs/superpowers/specs/) — inclui também o histórico
+de features que foram tentadas e removidas (bloqueio de SMS, seleção de chip em dual-SIM), com o
+motivo de cada remoção.
