@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Sms
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -27,17 +26,15 @@ import com.larchertech.antispam.blocking.PermissionStatus
 import com.larchertech.antispam.ui.screens.calls.CallsScreen
 import com.larchertech.antispam.ui.screens.onboarding.OnboardingScreen
 import com.larchertech.antispam.ui.screens.settings.SettingsScreen
-import com.larchertech.antispam.ui.screens.sms.SmsScreen
 
 private sealed class Destination(val route: String, val labelRes: Int, val icon: ImageVector) {
     data object Calls : Destination("calls", R.string.nav_calls, Icons.Filled.Call)
-    data object Sms : Destination("sms", R.string.nav_sms, Icons.Filled.Sms)
     data object Settings : Destination("settings", R.string.nav_settings, Icons.Filled.Settings)
 }
 
 private const val ONBOARDING_ROUTE = "onboarding"
 
-private val bottomNavDestinations = listOf(Destination.Calls, Destination.Sms, Destination.Settings)
+private val bottomNavDestinations = listOf(Destination.Calls, Destination.Settings)
 
 @Composable
 fun AppNavigation() {
@@ -45,8 +42,7 @@ fun AppNavigation() {
     val context = LocalContext.current
 
     val startDestination = remember {
-        val protectionComplete = PermissionStatus.isCallProtectionComplete(context) &&
-            PermissionStatus.isSmsProtectionComplete(context)
+        val protectionComplete = PermissionStatus.isCallProtectionComplete(context)
         if (protectionComplete) Destination.Calls.route else ONBOARDING_ROUTE
     }
 
@@ -86,7 +82,6 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Destination.Calls.route) { CallsScreen(onOpenOnboarding = onOpenOnboarding) }
-            composable(Destination.Sms.route) { SmsScreen(onOpenOnboarding = onOpenOnboarding) }
             composable(Destination.Settings.route) { SettingsScreen(onOpenOnboarding = onOpenOnboarding) }
             composable(ONBOARDING_ROUTE) {
                 OnboardingScreen(

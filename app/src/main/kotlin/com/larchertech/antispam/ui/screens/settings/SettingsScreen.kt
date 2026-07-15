@@ -38,7 +38,6 @@ fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) 
     )
 
     val callBlockingEnabled by viewModel.callBlockingEnabled.collectAsStateWithLifecycle()
-    val smsBlockingEnabled by viewModel.smsBlockingEnabled.collectAsStateWithLifecycle()
     val allowedNumbers by viewModel.allowedNumbers.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -52,15 +51,6 @@ fun SettingsScreen(onOpenOnboarding: () -> Unit, modifier: Modifier = Modifier) 
                     supportingContent = { Text(stringResource(R.string.settings_call_blocking_subtitle)) },
                     trailingContent = {
                         Switch(checked = callBlockingEnabled, onCheckedChange = viewModel::setCallBlockingEnabled)
-                    },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_sms_blocking_title)) },
-                    supportingContent = { Text(stringResource(R.string.settings_sms_blocking_subtitle)) },
-                    trailingContent = {
-                        Switch(checked = smsBlockingEnabled, onCheckedChange = viewModel::setSmsBlockingEnabled)
                     },
                 )
             }

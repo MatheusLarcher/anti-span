@@ -5,8 +5,6 @@ import android.app.role.RoleManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.PowerManager
-import android.provider.Telephony
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 
@@ -18,19 +16,9 @@ object PermissionStatus {
             PackageManager.PERMISSION_GRANTED
     }
 
-    fun hasReceiveSmsPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) ==
-            PackageManager.PERMISSION_GRANTED
-    }
-
     fun hasCallScreeningRole(context: Context): Boolean {
         val roleManager = context.getSystemService<RoleManager>() ?: return false
         return roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)
-    }
-
-    fun hasNotificationAccess(context: Context): Boolean {
-        return NotificationManagerCompat.getEnabledListenerPackages(context)
-            .contains(context.packageName)
     }
 
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
@@ -42,12 +30,4 @@ object PermissionStatus {
     fun isCallProtectionComplete(context: Context): Boolean {
         return hasContactsPermission(context) && hasCallScreeningRole(context)
     }
-
-    /** Requisitos obrigatórios pro bloqueio de SMS funcionar de verdade. */
-    fun isSmsProtectionComplete(context: Context): Boolean {
-        return hasContactsPermission(context) && hasReceiveSmsPermission(context) &&
-            hasNotificationAccess(context)
-    }
-
-    fun defaultSmsPackage(context: Context): String? = Telephony.Sms.getDefaultSmsPackage(context)
 }

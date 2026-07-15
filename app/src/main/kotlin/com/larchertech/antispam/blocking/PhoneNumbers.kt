@@ -5,7 +5,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.telephony.PhoneNumberUtils
 
-/** Normalização e checagem de contato para números de telefone recebidos (ligação ou SMS). */
+/** Normalização e checagem de contato para números de telefone de ligações recebidas. */
 object PhoneNumbers {
 
     fun normalize(rawNumber: String): String {

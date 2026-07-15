@@ -51,17 +51,12 @@ fun OnboardingScreen(onContinue: () -> Unit, modifier: Modifier = Modifier) {
     val contactsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) {}
-    val smsLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) {}
     val roleLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) {}
 
     val hasContacts = remember(resumeCounter) { PermissionStatus.hasContactsPermission(context) }
     val hasCallRole = remember(resumeCounter) { PermissionStatus.hasCallScreeningRole(context) }
-    val hasSms = remember(resumeCounter) { PermissionStatus.hasReceiveSmsPermission(context) }
-    val hasNotificationAccess = remember(resumeCounter) { PermissionStatus.hasNotificationAccess(context) }
     val hasBatteryExemption = remember(resumeCounter) { PermissionStatus.isIgnoringBatteryOptimizations(context) }
 
     val items = listOf(
@@ -80,18 +75,6 @@ fun OnboardingScreen(onContinue: () -> Unit, modifier: Modifier = Modifier) {
                 val intent = roleManager?.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
                 if (intent != null) roleLauncher.launch(intent)
             },
-        ),
-        ChecklistItem(
-            title = stringResource(R.string.onboarding_sms_title),
-            subtitle = stringResource(R.string.onboarding_sms_subtitle),
-            granted = hasSms,
-            onRequest = { smsLauncher.launch(Manifest.permission.RECEIVE_SMS) },
-        ),
-        ChecklistItem(
-            title = stringResource(R.string.onboarding_notification_access_title),
-            subtitle = stringResource(R.string.onboarding_notification_access_subtitle),
-            granted = hasNotificationAccess,
-            onRequest = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) },
         ),
         ChecklistItem(
             title = stringResource(R.string.onboarding_battery_title),
