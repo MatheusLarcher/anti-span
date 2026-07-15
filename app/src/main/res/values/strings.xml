@@ -44,11 +44,4 @@
     <string name="settings_allowed_numbers_title">Números permitidos</string>
     <string name="settings_allowed_numbers_empty">Nenhum número permitido manualmente</string>
     <string name="action_remove">Remover</string>
-
-    <string name="settings_sim_section_title">Chip para bloqueio</string>
-    <string name="settings_sim_call_label">Ligação</string>
-    <string name="settings_sim_sms_label">SMS</string>
-    <string name="settings_sim_choice_all">Todos os chips</string>
-    <string name="settings_sim_permission_title">Ver chips ativos</string>
-    <string name="settings_sim_permission_subtitle">Precisa de acesso ao estado do telefone pra listar os chips do aparelho</string>
 </resources>

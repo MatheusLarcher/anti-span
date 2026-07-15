@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.PowerManager
 import android.provider.Telephony
-import android.telephony.TelephonyManager
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -51,18 +50,4 @@ object PermissionStatus {
     }
 
     fun defaultSmsPackage(context: Context): String? = Telephony.Sms.getDefaultSmsPackage(context)
-
-    fun hasReadPhoneStatePermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) ==
-            PackageManager.PERMISSION_GRANTED
-    }
-
-    /** Quantos slots de chip o aparelho tem — não exige nenhuma permissão pra consultar. */
-    @Suppress("DEPRECATION")
-    fun phoneCount(context: Context): Int {
-        val telephonyManager = context.getSystemService<TelephonyManager>() ?: return 1
-        return telephonyManager.phoneCount
-    }
-
-    fun hasMultipleSims(context: Context): Boolean = phoneCount(context) > 1
 }

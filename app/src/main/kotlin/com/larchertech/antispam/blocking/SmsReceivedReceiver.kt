@@ -37,13 +37,7 @@ class SmsReceivedReceiver : BroadcastReceiver() {
                     Manifest.permission.READ_CONTACTS,
                 ) == PackageManager.PERMISSION_GRANTED
                 val normalized = PhoneNumbers.normalize(rawNumber)
-                val storedSubscriptionId = container.settingsRepository.smsBlockingSubscriptionId.first()
-                val selectedSubscriptionId = storedSubscriptionId?.takeIf {
-                    SimSubscriptions.isStillActive(context, it)
-                }
-                val chipMatches = selectedSubscriptionId == null ||
-                    SimSubscriptions.matchesFilter(selectedSubscriptionId, SimSubscriptions.resolveSmsSubscriptionId(intent))
-                val known = !blockingEnabled || !hasContactsPermission || !chipMatches ||
+                val known = !blockingEnabled || !hasContactsPermission ||
                     PhoneNumbers.isSavedContact(context, rawNumber) ||
                     container.database.allowedNumberDao().isAllowed(normalized)
 
