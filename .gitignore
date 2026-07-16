@@ -13,6 +13,8 @@
 .cxx/
 *.apk
 *.aab
+# Exceção: o APK de release entregue junto do repositório (link de download do README)
+!/anti-span.apk
 app/build/
 app/release/
 app/debug/
